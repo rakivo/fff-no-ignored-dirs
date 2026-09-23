@@ -3,65 +3,66 @@ use std::path::Path;
 /// Directories excluded when walking a non-git root. Entries are `cfg`-gated
 /// so a single iteration covers standard + platform-specific overrides.
 pub(crate) const IGNORED_DIRS: &[&str] = &[
-    // various dev tools that can be meet in the developer app
-    "node_modules",
-    "__pycache__",
-    "venv",
-    ".venv",
-    "target/debug",
-    "target/release",
-    "target/rust-analyzer",
-    "target/criterion",
-    // Language package caches in non-git roots.
-    "go/pkg/mod",
-    ".cargo/registry",
-    ".rustup/toolchains",
-    ".gradle/caches",
-    ".m2/repository",
-    ".npm/_cacache",
-    ".pub-cache",
-    #[cfg(not(target_os = "windows"))]
-    ".local/state", // this contains tons of logs which generate too much watcher noise
-    #[cfg(target_os = "macos")]
-    "Library/Application Support",
-    #[cfg(target_os = "macos")]
-    "Library/Caches",
-    #[cfg(target_os = "macos")]
-    "Library/Containers", // sandboxed apps data
-    #[cfg(target_os = "macos")]
-    "Library/Group Containers", // random application data and networking
-    #[cfg(target_os = "macos")]
-    "Library/pnpm",
-    #[cfg(target_os = "macos")]
-    "Library/Metadata",
-    #[cfg(target_os = "macos")]
-    "Library/Developer/CoreSimulator",
-    #[cfg(target_os = "macos")]
-    "Library/Android",
-    #[cfg(target_os = "macos")]
-    "Library/Logs",
-    #[cfg(target_os = "macos")]
-    "Library/Daemon Containers",
-    #[cfg(target_os = "macos")]
-    "Library/Trial",
-    #[cfg(target_os = "macos")]
-    "Library/Preferences",
-    #[cfg(target_os = "macos")]
-    "Library/Messages",
-    #[cfg(target_os = "macos")]
-    "Library/IdentityServices",
-    #[cfg(target_os = "windows")]
-    "bin/Debug",
-    #[cfg(target_os = "windows")]
-    "bin/Release",
-    #[cfg(target_os = "windows")]
-    "Program Files",
-    #[cfg(target_os = "windows")]
-    "Program Files (x86)",
-    #[cfg(target_os = "windows")]
-    "AppData/Local",
-    #[cfg(target_os = "windows")]
-    "AppData/Roaming",
+    // @Note: Don't skip any directories for the benchmark.
+    // // various dev tools that can be meet in the developer app
+    // "node_modules",
+    // "__pycache__",
+    // "venv",
+    // ".venv",
+    // "target/debug",
+    // "target/release",
+    // "target/rust-analyzer",
+    // "target/criterion",
+    // // Language package caches in non-git roots.
+    // "go/pkg/mod",
+    // ".cargo/registry",
+    // ".rustup/toolchains",
+    // ".gradle/caches",
+    // ".m2/repository",
+    // ".npm/_cacache",
+    // ".pub-cache",
+    // #[cfg(not(target_os = "windows"))]
+    // ".local/state", // this contains tons of logs which generate too much watcher noise
+    // #[cfg(target_os = "macos")]
+    // "Library/Application Support",
+    // #[cfg(target_os = "macos")]
+    // "Library/Caches",
+    // #[cfg(target_os = "macos")]
+    // "Library/Containers", // sandboxed apps data
+    // #[cfg(target_os = "macos")]
+    // "Library/Group Containers", // random application data and networking
+    // #[cfg(target_os = "macos")]
+    // "Library/pnpm",
+    // #[cfg(target_os = "macos")]
+    // "Library/Metadata",
+    // #[cfg(target_os = "macos")]
+    // "Library/Developer/CoreSimulator",
+    // #[cfg(target_os = "macos")]
+    // "Library/Android",
+    // #[cfg(target_os = "macos")]
+    // "Library/Logs",
+    // #[cfg(target_os = "macos")]
+    // "Library/Daemon Containers",
+    // #[cfg(target_os = "macos")]
+    // "Library/Trial",
+    // #[cfg(target_os = "macos")]
+    // "Library/Preferences",
+    // #[cfg(target_os = "macos")]
+    // "Library/Messages",
+    // #[cfg(target_os = "macos")]
+    // "Library/IdentityServices",
+    // #[cfg(target_os = "windows")]
+    // "bin/Debug",
+    // #[cfg(target_os = "windows")]
+    // "bin/Release",
+    // #[cfg(target_os = "windows")]
+    // "Program Files",
+    // #[cfg(target_os = "windows")]
+    // "Program Files (x86)",
+    // #[cfg(target_os = "windows")]
+    // "AppData/Local",
+    // #[cfg(target_os = "windows")]
+    // "AppData/Roaming",
 ];
 
 #[cfg(all(not(feature = "zlob"), feature = "ripgrep"))]
