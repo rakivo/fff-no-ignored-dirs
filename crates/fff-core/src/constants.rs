@@ -2,7 +2,7 @@
 /// (`GrepSearchOptions::max_file_size`) and the content-cache mmap cap
 /// (`ContentCacheBudget::max_file_size`). Binary detection also streams up to
 /// this far so nothing grep would read is left unclassified.
-pub const MAX_FFFILE_SIZE: u64 = 10 * 1024 * 1024;
+pub const MAX_FFFILE_SIZE: u64 = 50 * 1024 * 1024;
 
 /// Upper bound on a file the bigram builder will build, if the file is very large there is a
 /// big probability it will only bloat the available bigrams and will anyway pop ut from the prefilter
