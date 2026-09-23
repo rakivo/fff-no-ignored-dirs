@@ -20,10 +20,10 @@ pub(crate) fn walk_collect_files(
 ) -> crate::Result<WalkOutput> {
     // gitignore on; skip hidden on non-git roots (so `~/` doesn't recurse into
     // ~/.cache, ~/.config, etc.); optionally follow symlinks.
-    let mut flags = WalkFlags::GITIGNORE;
-    if !is_git_repo {
-        flags |= WalkFlags::SKIP_HIDDEN;
-    }
+    let mut flags = WalkFlags::ABORT_ON_ERROR;
+    // if !is_git_repo {
+    //     flags |= WalkFlags::SKIP_HIDDEN;
+    // }
     if follow_symlinks {
         flags |= WalkFlags::FOLLOW_SYMLINKS;
     }
