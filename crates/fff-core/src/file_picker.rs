@@ -2395,7 +2395,7 @@ fn is_binary_extension_str(ext: &str) -> bool {
         // Gzipped-XML / binary maps
         "dia" | "bcmap" |
         // Protobuf wire format
-        "pb" |
+        // "pb" | // nocheckin
         // Data/serialized
         "parquet" | "arrow" |
         // IDE/OS metadata
