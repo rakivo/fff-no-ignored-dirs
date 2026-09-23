@@ -570,6 +570,20 @@ impl FileItem {
     /// Chunked classifier of the binary content of the file chunk by chunk
     /// accepts path which to reuse the allocated buffer for absolute path read
     pub(crate) fn detect_binary_per_byte(&self, path: &Path, chunk: &mut [u8]) {
+        /// Any of these at the start of a file means the NUL bytes that encoding
+        /// legitimately produces for ASCII-range text aren't a binary signal.
+        const TEXT_BOMS: &[&[u8]] = &[
+            &[0x00, 0x00, 0xFE, 0xFF], // UTF32BE
+            &[0xFF, 0xFE, 0x00, 0x00], // UTF32LE
+            &[0xEF, 0xBB, 0xBF],       // UTF8
+            &[0xFE, 0xFF],             // UTF16BE
+            &[0xFF, 0xFE],             // UTF16LE
+        ];
+
+        fn starts_with_text_bom(content: &[u8]) -> bool {
+            TEXT_BOMS.iter().any(|bom| content.starts_with(bom))
+        }
+
         if self.size == 0 {
             return;
         }
@@ -583,6 +597,8 @@ impl FileItem {
             return;
         };
 
+        let mut first_read = true;
+
         loop {
             match file.read(chunk) {
                 Ok(0) => break,
@@ -591,6 +607,23 @@ impl FileItem {
                     break;
                 }
                 Ok(n) => {
+                    if first_read {
+                        first_read = false;
+
+                        //
+                        // @Incomplete: I'm not sure if fff supports searching
+                        // in non-UTF8 encoded files, but this is here just to
+                        // prevent this non-UTF8 file from being classified as
+                        // 'binary', how useful or not that can be as of now.
+                        //
+                        // 2026-09-23 -rakivo
+                        //
+
+                        if starts_with_text_bom(&chunk[..n]) {
+                            return;
+                        }
+                    }
+
                     if detect_binary_content(&chunk[..n]) {
                         self.set_binary(true);
                     }
